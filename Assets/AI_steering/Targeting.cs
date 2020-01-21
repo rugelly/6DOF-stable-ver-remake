@@ -8,6 +8,8 @@ public class Targeting : MonoBehaviour
     public Vector3 eye;
     public GameObject target;
 
+    [HideInInspector] public bool targetInLOS;
+
     private Collider _targetCollider;
     public Vector3 _targetLastPosition;
     private string _wantedTag = "Player";
@@ -30,7 +32,8 @@ public class Targeting : MonoBehaviour
         {
             if (InRange())
             {
-                if (LineOfSight())
+                targetInLOS = LineOfSight();
+                if (targetInLOS)
                     _targetLastPosition = target.transform.position;
             }
         }
