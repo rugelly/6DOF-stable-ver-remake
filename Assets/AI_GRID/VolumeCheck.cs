@@ -1,15 +1,23 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 [ExecuteInEditMode]
 public class VolumeCheck : MonoBehaviour
 {
+    public TwentySixDirections _dir;
     public Vector3 bounds;
-    // public LayerMask mask;
-    // public float testRadius;
+    public LayerMask mask;
+    [SerializeField]
     private int[,,] statusGrid;
-    public GameObject prefab;
-    public bool delete, generate, generated;
+    [SerializeField]
+    private int[,,] coordGrid;
+
+    /// PREFAB STUFF DEPRECATED
+    // public GameObject prefab;
+
+    public bool generate;
+    
     private const int 
         AIR     = 0, 
         SOLID   = 9, 
@@ -20,46 +28,146 @@ public class VolumeCheck : MonoBehaviour
     {
     if (!Application.isPlaying)
     {
-        if (delete)
-        {
-        // for (int i = 0; i < 32; i++)
-        while (transform.childCount != 0)
-        {
-            foreach (Transform child in transform)
-            {
-                DestroyImmediate(child.gameObject);
-            }
-        }
-        generated = false;
-        delete = false;
-        }
+        /// PREFAB STUFF DEPRECATED
+        // if (delete)
+        // {
+        // // for (int i = 0; i < 32; i++)
+        // while (transform.childCount != 0)
+        // {
+        //     foreach (Transform child in transform)
+        //     {
+        //         DestroyImmediate(child.gameObject);
+        //     }
+        // }
+        // generated = false;
+        // delete = false;
+        // }
 
-        if (generate && !generated)
+        if (generate)
         {
-        statusGrid = new int[Mathf.FloorToInt(bounds.x),Mathf.FloorToInt(bounds.y),Mathf.FloorToInt(bounds.z)];
+            coordGrid = new int[Mathf.FloorToInt(bounds.x),Mathf.FloorToInt(bounds.y),Mathf.FloorToInt(bounds.z)];
+            statusGrid = coordGrid;
 
-        var prefabCount = 0;
+            /// PREFAB STUFF DEPRECATED
+            // GeneratePrefabs();
 
-        for (int l = 0; l < statusGrid.GetLength(0); l++)
-        {
-            for (int h = 0; h < statusGrid.GetLength(1); h++)
-            {
-                for (int w = 0; w < statusGrid.GetLength(2); w++)
-                {
-                    UnityEditor.PrefabUtility.InstantiatePrefab(prefab, transform);
-                    
-                    var pf = transform.GetChild(prefabCount);
-                    pf.position = new Vector3(l, h, w) + transform.position;
-                    prefabCount++;
-                }
-            }
-        }
-        generated = true;
+            CheckSpotsAndMarkStatusGrid();
+        
+        // generated = true;
         generate = false;
         }
     }
     }
 
+    private void CheckSpotsAndMarkStatusGrid()
+    {
+        for (int l = 0; l < coordGrid.GetLength(0); l++)
+        {
+            for (int h = 0; h < coordGrid.GetLength(1); h++)
+            {
+                for (int w = 0; w < coordGrid.GetLength(2); w++)
+                {
+                    if (ThisSpotFull(l, h, w))
+                        statusGrid[l,h,w] = SOLID;
+                    else
+                        statusGrid[l,h,w] = CheckAroundSpot(new Vector3(l, h, w));
+                }
+            }
+        }
+    }
+
+    private int CheckAroundSpot(Vector3 position)
+    {
+        for (int i = 0; i < _dir.all.Length; i++)
+        {
+            if (Check(position, _dir.all[i]))
+            {
+                if (i == 1  ||
+                    i == 7  ||
+                    i == 9  ||
+                    i == 11 ||
+                    i == 13 ||
+                    i == 17 ||
+                    i == 21 ||
+                    i == 23 ||
+                    i == 25)
+                // something hit in any downward direction?
+                    return GROUND;
+                // something hit in any direction?
+                else
+                    return SURFACE;
+            }
+        }
+        // didnt hit a single thing
+        return AIR;
+    }
+
+    private bool ThisSpotFull(int x, int y, int z)
+    {
+        var collidersInThisSpot = Physics.OverlapSphere(transform.position + new Vector3(x, y, z), 0.2f, mask);
+        if (collidersInThisSpot.Length > 0 || collidersInThisSpot == null)
+            return true;
+        else
+            return false;
+    }
+
+    private bool Check(Vector3 position, Vector3 direction)
+    {
+        return Physics.Raycast(position + transform.position, direction, 0.9f, mask);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Color colour;
+
+        for (int l = 0; l < coordGrid.GetLength(0); l++)
+        {
+        for (int h = 0; h < coordGrid.GetLength(1); h++)
+        {
+        for (int w = 0; w < coordGrid.GetLength(2); w++)
+        {
+            var thisSpot = statusGrid[l,h,w];
+
+            if (thisSpot == AIR)
+                colour = Color.clear;
+            else if (thisSpot == GROUND)
+                colour = Color.green;
+            else if (thisSpot == SURFACE)
+                colour = Color.blue;
+            else if (thisSpot == SOLID)
+                colour = Color.red;
+            else
+                colour = Color.magenta;
+
+            Gizmos.color = colour;
+            Gizmos.DrawWireCube(new Vector3(l, h, w) + transform.position, Vector3.one / 2);
+        }
+        }
+        }
+    }
+
+    /// PREFAB STUFF DEPRECATED
+    // private void GeneratePrefabs()
+    // {
+    //     var prefabCount = 0;
+
+    //     for (int l = 0; l < coordGrid.GetLength(0); l++)
+    //     {
+    //         for (int h = 0; h < coordGrid.GetLength(1); h++)
+    //         {
+    //             for (int w = 0; w < coordGrid.GetLength(2); w++)
+    //             {
+    //                 UnityEditor.PrefabUtility.InstantiatePrefab(prefab, transform);
+                    
+    //                 var pf = transform.GetChild(prefabCount);
+    //                 pf.position = new Vector3(l, h, w) + transform.position;
+    //                 prefabCount++;
+    //             }
+    //         }
+    //     }
+    // }
+
+    /// OLD
     // private int SpotCheck(float x, float y, float z)
     // {
     //     var colliders = Physics.OverlapSphere(transform.position + new Vector3(x, y, z), testRadius, mask);
@@ -86,6 +194,7 @@ public class VolumeCheck : MonoBehaviour
     //     }
     // }
 
+    /// OLD
     // private int ColliderPositionCheck(Collider collider, Vector3 castPosition)
     // {
     //     var colPos = collider.transform.position;
@@ -100,6 +209,7 @@ public class VolumeCheck : MonoBehaviour
         
     // }
 
+    /// OLD
     // private void OnDrawGizmos()
     // {
     //     Gizmos.color = Color.red;
@@ -131,4 +241,6 @@ public class VolumeCheck : MonoBehaviour
     //         }
     //     }
     // }
+
+
 }
