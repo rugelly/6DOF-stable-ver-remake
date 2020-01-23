@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de485a85a4ba893489452c8cc4dbc6d6, type: 3}
-  m_Name: New Twenty Six Directions
+  m_Name: direction ref
   m_EditorClassIdentifier: 
   all:
   - {x: 0, y: 1, z: 0}

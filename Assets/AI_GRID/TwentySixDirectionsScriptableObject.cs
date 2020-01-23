@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName="CUSTOM/DIRECTION REF")]
-public class TwentySixDirections : ScriptableObject
+public class TwentySixDirectionsScriptableObject : ScriptableObject
 {
     public Vector3[] all = 
     {
