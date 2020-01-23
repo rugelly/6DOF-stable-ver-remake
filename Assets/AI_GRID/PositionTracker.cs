@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using UnityEngine;
 
 public class PositionTracker : MonoBehaviour
 {
@@ -7,11 +9,12 @@ public class PositionTracker : MonoBehaviour
     public WalksOn walksOn;
 
     public Vector3 currentGridPos;
-    public bool[] moveableDirections;
+    [HideInInspector] public bool[] moveableDirections;
 
     private void OnEnable()
     {
         _volume = FindObjectOfType<VolumeCheck>();
+        moveableDirections = new bool[_directionRef.all.Length];
     }
 
     private void Update()
@@ -28,7 +31,7 @@ public class PositionTracker : MonoBehaviour
                 Mathf.Clamp(checkIndex.x, 0, _volume.length),
                 Mathf.Clamp(checkIndex.y, 0, _volume.height),
                 Mathf.Clamp(checkIndex.z, 0, _volume.width));
-                
+
             var status = _volume.statusGrid[(int)checkIndex.x, (int)checkIndex.y, (int)checkIndex.z];
 
             moveableDirections[i] = CheckType(status);
@@ -37,6 +40,9 @@ public class PositionTracker : MonoBehaviour
 
     private bool CheckType(int status)
     {
+        if (status == _volume.SOLID)
+            return false;
+            
         switch (walksOn)
         {
             case WalksOn.all:
@@ -49,6 +55,31 @@ public class PositionTracker : MonoBehaviour
                 return status == _volume.GROUND ? true : false;
             default:
                 return false;
+        }
+    }
+
+    public int GetClosestValidDirectionIndex(Vector3 direction)
+    {
+        var correctedInputDirection = direction - transform.position;
+        float[] closestDirection = new float[26];
+        for (int i = 0; i < _directionRef.all.Length; i++)
+        {
+            if (moveableDirections[i])
+                closestDirection[i] = (correctedInputDirection - _directionRef.all[i]).sqrMagnitude;
+            else
+                closestDirection[i] = 9999; // TODO: is infinity instead of this better?
+        }
+        return Array.IndexOf(closestDirection, closestDirection.Min());
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+
+        for (int i = 0; i < moveableDirections.Length; i++)
+        {
+            if (moveableDirections[i])
+                Gizmos.DrawWireCube(transform.position + _directionRef.all[i], Vector3.one * 0.4f);
         }
     }
 }
