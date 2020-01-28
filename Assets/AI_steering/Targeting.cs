@@ -8,10 +8,11 @@ public class Targeting : MonoBehaviour
     public Vector3 eye;
     public GameObject target;
 
-    [HideInInspector] public bool targetInLOS;
+    public bool inLOS;
+    public bool inRange;
+    public Vector3 targetLastPosition;
 
     private Collider _targetCollider;
-    public Vector3 _targetLastPosition;
     private string _wantedTag = "Player";
 
     private void Awake()
@@ -30,12 +31,17 @@ public class Targeting : MonoBehaviour
     {
         if (target != null)
         {
-            if (InRange())
+            inRange = InRange();
+            if (inRange)
             {
-                targetInLOS = LineOfSight();
-                if (targetInLOS)
-                    _targetLastPosition = target.transform.position;
+                inLOS = LineOfSight();
+                if (LineOfSight())
+                    targetLastPosition = target.transform.position;
             }
+        }
+        else
+        {
+            inRange = inLOS = false;
         }
     }
 
@@ -80,6 +86,6 @@ public class Targeting : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, aggroRange);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(_targetLastPosition, Vector3.one * 0.9f);
+        Gizmos.DrawWireCube(targetLastPosition, Vector3.one * 0.9f);
     }
 }

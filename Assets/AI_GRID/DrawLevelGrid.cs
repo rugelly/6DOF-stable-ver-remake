@@ -2,48 +2,42 @@
 
 public class DrawLevelGrid : MonoBehaviour
 {
-    public bool draw;
+    public GridStorageSO _grid;
+    public bool drawGrid, drawBorder;
+    [Range(0.1f, 1)]
+    public float size;
 
     private void OnDrawGizmos()
     {
-    if (Application.isPlaying)
-    {
-        VolumeCheck _vc = GetComponent<VolumeCheck>();
-
-        if (draw)
+        if (drawGrid)
         {
-            Color colour;
-
-            for (int l = 0; l < _vc.length; l++)
+            foreach (var point in _grid.points)
             {
-                for (int h = 0; h < _vc.height; h++)
-                {
-                    for (int w = 0; w < _vc.width; w++)
-                    {
-                        var thisSpot = _vc.statusGrid[l,h,w];
-
-                        if (thisSpot == _vc.AIR)
-                            colour = Color.clear;
-                        else if (thisSpot == _vc.GROUND)
-                            colour = Color.green;
-                        else if (thisSpot == _vc.SURFACE)
-                            colour = Color.blue;
-                        else if (thisSpot == _vc.SOLID)
-                            colour = Color.red;
-                        else
-                            colour = Color.magenta;
-
-                        Gizmos.color = colour;
-                        Gizmos.DrawWireCube(new Vector3(l, h, w) + transform.position, Vector3.one / 2);
-                    }
-                }
+                Gizmos.color = SetGizmoColour(point.status);
+                Gizmos.DrawWireCube(point.coords, Vector3.one * size);
             }
+        }
 
+        if (drawBorder)
+        {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(
-                transform.position + new Vector3(_vc.length / 2, _vc.height / 2, _vc.width / 2),
-                new Vector3(_vc.length, _vc.height, _vc.width));
+            Gizmos.DrawWireCube((_grid.size / 2) + (Vector3.one * -0.5f), _grid.size);
         }
     }
+
+    Color SetGizmoColour(int status)
+    {
+        if      (status == _grid.AIR)
+            return Color.clear;
+        else if (status == _grid.GROUND)
+            return Color.green;
+        else if (status == _grid.SURFACE)
+            return Color.blue;
+        else if (status == _grid.SOLID)
+            return Color.red;
+        else if (status == _grid.BORDER)
+            return Color.clear;
+        else
+            return Color.magenta;
     }
 }

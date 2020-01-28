@@ -4,33 +4,77 @@ public class Motor : MonoBehaviour
 {
     public TwentySixDirectionsScriptableObject _directionRef;
     public float speed;
+    public float directionUnblockMoveMin;
+    public float directionBlockTimerMax;
+
     PositionTracker _position;
-    private CheckDirections _checkDirection;
-    private Targeting _targeting;
-    private CharacterController _controller;
+    Targeting _targeting;
+    CharacterController _controller;
 
     private void Awake()
     {
-        _checkDirection = GetComponent<CheckDirections>();
         _position = GetComponent<PositionTracker>();
         _targeting = GetComponent<Targeting>();
         _controller = GetComponent<CharacterController>();
     }
 
-    public void Move(Vector3 direction, float speed)
-    {
-        transform.position += direction * (speed * Time.deltaTime);
-    }
-
     private void Update()
     {
-        // var index = _checkDirection.GetClosestValidDirectionIndex(_targeting._targetLastPosition);
-        // var direction = _checkDirection.directionReference[index];
+        // BlockDirectionTimerRough();
 
-        var index = _position.GetClosestValidDirectionIndex(_targeting._targetLastPosition);
+        // index = _position.GetClosestValidDirectionIndex(_targeting.targetLastPosition);
+        // var direction = _directionRef.all[index];
+
+        // Debug.DrawRay(transform.position, direction, Color.cyan);
+        // _controller.Move(direction * speed * Time.deltaTime);
+    }
+
+    public void Move(Vector3 target)
+    {
+        BlockDirectionTimerRough();
+
+        index = _position.GetClosestValidDirectionIndex(target);
         var direction = _directionRef.all[index];
 
         Debug.DrawRay(transform.position, direction, Color.cyan);
         _controller.Move(direction * speed * Time.deltaTime);
+    }
+
+    // TODO: make this nice actually pls
+    Vector3 storedPos;
+    float timer;
+    int storedIndex;
+    int index;
+    bool toggle;
+    bool block;
+    void BlockDirectionTimerRough()
+    {
+        var pos = transform.position;
+        if (!toggle)
+        {
+            storedPos = pos;
+            timer = 0;
+            toggle = true;
+        }
+        else
+        {
+            if (Vector3.Distance(pos, storedPos) > directionUnblockMoveMin)
+            {
+                block = false;
+                toggle = false;
+            }
+
+            if (timer > directionBlockTimerMax)
+            {
+                storedIndex = index;
+                block = true;
+                toggle = false;
+            }
+
+            timer += 1 * Time.deltaTime;
+        }
+
+        if (block)
+            _position.moveableDirections[storedIndex] = false;
     }
 }

@@ -4,55 +4,64 @@ using UnityEngine;
 
 public class PositionTracker : MonoBehaviour
 {
-    VolumeCheck _volume;
+    public GridStorageSO _grid;
     public TwentySixDirectionsScriptableObject _directionRef;
     public WalksOn walksOn;
-
-    public Vector3 currentGridPos;
-    [HideInInspector] public bool[] moveableDirections;
+    public Vector3 currentGridCoords;
+    public bool[] moveableDirections;
+    public bool drawGizmo;
 
     private void OnEnable()
     {
-        _volume = FindObjectOfType<VolumeCheck>();
         moveableDirections = new bool[_directionRef.all.Length];
     }
+
+    Vector3 prevGridCoords;
 
     private void Update()
     {
         var pos = transform.position;
-        currentGridPos = new Vector3(
-            Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
+        currentGridCoords = new Vector3(
+            Mathf.FloorToInt(pos.x), 
+            Mathf.FloorToInt(pos.y), 
+            Mathf.FloorToInt(pos.z));
 
+        // only check surrounding when grid pos changes
+        // if (currentGridCoords != prevGridCoords)
         // check every position around current against the status grid
         for (int i = 0; i < _directionRef.all.Length; i++)
         {
-            var checkIndex = currentGridPos + _directionRef.all[i];
+            var checkIndex = currentGridCoords + _directionRef.all[i];
             checkIndex = new Vector3(
-                Mathf.Clamp(checkIndex.x, 0, _volume.length),
-                Mathf.Clamp(checkIndex.y, 0, _volume.height),
-                Mathf.Clamp(checkIndex.z, 0, _volume.width));
+                Mathf.Clamp(checkIndex.x, 0, _grid.size.x),
+                Mathf.Clamp(checkIndex.y, 0, _grid.size.y),
+                Mathf.Clamp(checkIndex.z, 0, _grid.size.z));
 
-            var status = _volume.statusGrid[(int)checkIndex.x, (int)checkIndex.y, (int)checkIndex.z];
+            var status = 
+                _grid.points[_grid.FlattenedIndex((int)checkIndex.x, (int)checkIndex.y, (int)checkIndex.z)]
+                .status;
 
             moveableDirections[i] = CheckType(status);
         }
+
+        prevGridCoords = currentGridCoords;
     }
 
     private bool CheckType(int status)
     {
-        if (status == _volume.SOLID)
+        if (status == _grid.SOLID)
             return false;
             
         switch (walksOn)
         {
             case WalksOn.all:
-                return status != _volume.SOLID ? true : false;
+                return status != _grid.SOLID ? true : false;
             case WalksOn.airOnly:
-                return status == _volume.AIR ? true : false;
+                return status == _grid.AIR ? true : false;
             case WalksOn.surfaceOnly:
-                return status == _volume.SURFACE || status == _volume.GROUND ? true : false;
+                return status == _grid.SURFACE || status == _grid.GROUND ? true : false;
             case WalksOn.groundOnly:
-                return status == _volume.GROUND ? true : false;
+                return status == _grid.GROUND ? true : false;
             default:
                 return false;
         }
@@ -67,7 +76,7 @@ public class PositionTracker : MonoBehaviour
             if (moveableDirections[i])
                 closestDirection[i] = (correctedInputDirection - _directionRef.all[i]).sqrMagnitude;
             else
-                closestDirection[i] = 9999; // TODO: is infinity instead of this better?
+                closestDirection[i] = Mathf.Infinity; // TODO: just use a big number instead?
         }
         return Array.IndexOf(closestDirection, closestDirection.Min());
     }
@@ -75,7 +84,7 @@ public class PositionTracker : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-
+        if (drawGizmo)
         for (int i = 0; i < moveableDirections.Length; i++)
         {
             if (moveableDirections[i])

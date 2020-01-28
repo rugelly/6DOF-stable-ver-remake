@@ -2,7 +2,7 @@
 
 public class LockPosition : MonoBehaviour
 {
-    public Vector3 position;
+    Vector3 position = Vector3.zero;
 
     private void OnEnable()
     {

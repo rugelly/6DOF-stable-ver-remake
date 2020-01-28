@@ -19,15 +19,15 @@ public class TargetBasedPosition : MonoBehaviour
 
     private void Update()
     {
-        var currentDistance = (transform.position - _targeting._targetLastPosition).sqrMagnitude;
+        var currentDistance = (transform.position - _targeting.targetLastPosition).sqrMagnitude;
 
-        var variableDistanceFromTarget = _targeting.targetInLOS ? distanceFromTarget : 0;
+        var variableDistanceFromTarget = _targeting.inLOS ? distanceFromTarget : 0;
 
         if (currentDistance != variableDistanceFromTarget)
         {
             _context.SetPreference(
                 _context.like, 
-                _checkDirections.GetClosestValidDirectionIndex(_targeting._targetLastPosition),
+                _checkDirections.GetClosestValidDirectionIndex(_targeting.targetLastPosition),
                 preference);
         }
     }
