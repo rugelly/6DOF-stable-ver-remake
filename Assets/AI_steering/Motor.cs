@@ -18,17 +18,6 @@ public class Motor : MonoBehaviour
         _controller = GetComponent<CharacterController>();
     }
 
-    private void Update()
-    {
-        // BlockDirectionTimerRough();
-
-        // index = _position.GetClosestValidDirectionIndex(_targeting.targetLastPosition);
-        // var direction = _directionRef.all[index];
-
-        // Debug.DrawRay(transform.position, direction, Color.cyan);
-        // _controller.Move(direction * speed * Time.deltaTime);
-    }
-
     public void Move(Vector3 target)
     {
         BlockDirectionTimerRough();
@@ -40,9 +29,30 @@ public class Motor : MonoBehaviour
         _controller.Move(direction * speed * Time.deltaTime);
     }
 
+    float timerRandomDir;
+    // int index; // already exists
+    public float chooseNewDirectionTime;
+    public void MoveRandom()
+    {
+        BlockDirectionTimerRough();
+
+        if (timerRandomDir == chooseNewDirectionTime)
+            index = Random.Range(0, 26);
+        while (_position.moveableDirections[index] == false)
+        {
+            index = Random.Range(0, 26);
+        }
+        var direction = _directionRef.all[index];
+        Debug.DrawRay(transform.position, direction, Color.cyan);
+        _controller.Move(direction * speed * Time.deltaTime);        
+
+        timerRandomDir += chooseNewDirectionTime * Time.deltaTime;
+        chooseNewDirectionTime = Mathf.Clamp(timerRandomDir, 0, chooseNewDirectionTime);
+    }
+
     // TODO: make this nice actually pls
     Vector3 storedPos;
-    float timer;
+    float timerBlockDir;
     int storedIndex;
     int index;
     bool toggle;
@@ -53,7 +63,7 @@ public class Motor : MonoBehaviour
         if (!toggle)
         {
             storedPos = pos;
-            timer = 0;
+            timerBlockDir = 0;
             toggle = true;
         }
         else
@@ -64,14 +74,14 @@ public class Motor : MonoBehaviour
                 toggle = false;
             }
 
-            if (timer > directionBlockTimerMax)
+            if (timerBlockDir > directionBlockTimerMax)
             {
                 storedIndex = index;
                 block = true;
                 toggle = false;
             }
 
-            timer += 1 * Time.deltaTime;
+            timerBlockDir += 1 * Time.deltaTime;
         }
 
         if (block)

@@ -38,7 +38,7 @@ public class FollowType : MonoBehaviour
     }
 
     float timer;
-    private void FollowRotatingPoint()
+    private void FollowRotatingPoint() // TODO: rotating axis needs to be both: customizable, and match the surface enemy/target is on
     {
         var rot = 360 * timer;
         var targetRotatingPoint = RotatePointAroundPivot(_targeting.targetLastPosition
@@ -56,10 +56,10 @@ public class FollowType : MonoBehaviour
         followRotatePoint = targetRotatingPoint;
     }
 
-    private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+    private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angle)
     {
         Vector3 dir = point - pivot; // get point direction relative to pivot
-        dir = Quaternion.Euler(angles) * dir; // rotate it
+        dir = Quaternion.Euler(angle) * dir; // rotate it
         point = dir + pivot; // calculate rotated point
         return point; // return it
     }
