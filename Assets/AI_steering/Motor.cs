@@ -8,13 +8,11 @@ public class Motor : MonoBehaviour
     public float directionBlockTimerMax;
 
     PositionTracker _position;
-    Targeting _targeting;
     CharacterController _controller;
 
     private void Awake()
     {
         _position = GetComponent<PositionTracker>();
-        _targeting = GetComponent<Targeting>();
         _controller = GetComponent<CharacterController>();
     }
 
@@ -29,6 +27,7 @@ public class Motor : MonoBehaviour
         _controller.Move(direction * speed * Time.deltaTime);
     }
 
+    // TODO: does this even work??
     float timerRandomDir;
     // int index; // already exists
     public float chooseNewDirectionTime;
@@ -50,7 +49,8 @@ public class Motor : MonoBehaviour
         chooseNewDirectionTime = Mathf.Clamp(timerRandomDir, 0, chooseNewDirectionTime);
     }
 
-    // TODO: make this nice actually pls
+    // TODO: clean this up
+    // TODO: more configurable stuff eg: max num of sequential directions to block before resetting
     Vector3 storedPos;
     float timerBlockDir;
     int storedIndex;
