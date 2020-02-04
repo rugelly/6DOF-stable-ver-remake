@@ -27,15 +27,15 @@ public class DrawLevelGrid : MonoBehaviour
 
     Color SetGizmoColour(int status)
     {
-        if      (status == _grid.AIR)
+        if      (status == Status.AIR)
             return Color.clear;
-        else if (status == _grid.GROUND)
+        else if (status == Status.GROUND)
             return Color.green;
-        else if (status == _grid.SURFACE)
+        else if (status == Status.SURFACE)
             return Color.blue;
-        else if (status == _grid.SOLID)
+        else if (status == Status.SOLID)
             return Color.red;
-        else if (status == _grid.BORDER)
+        else if (status == Status.BORDER)
             return Color.clear;
         else
             return Color.magenta;

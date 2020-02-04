@@ -26,5 +26,12 @@ public class EnemyStats : ScriptableObject
 
     public float maintainDistance;
 
+    public Vector2 rotateAroundTargetPosition;
+
+    [Range(0, 360)]
+    public int rotateAroundDegrees;
+
+    public float rotateAroundSpeed;
+
 #pragma warning restore
 }

@@ -8,6 +8,13 @@ public enum WalksOn
     airOnly
 }
 
+public enum PathfindsThrough
+{
+    both,
+    ground,
+    surface
+}
+
 public static class Vector3Diagonal
 {
     private static float p {get{return  1;}}
@@ -29,12 +36,19 @@ public static class Vector3Diagonal
     backUp   = new Vector3(0, p, n), backDn   = new Vector3(0, n, n);
 }
 
-public enum Behaviour
+public class Status
 {
-    passive,
-    random,
-    maintainDistance,
-    circleTarget,
+    public const int 
+        AIR     = 0, 
+        SOLID   = 9, 
+        GROUND  = 2, 
+        SURFACE = 3,
+        BORDER  = 8;
+}
 
-    waypointPath
+public enum RangeType
+{
+    sight,
+    detect,
+    custom
 }

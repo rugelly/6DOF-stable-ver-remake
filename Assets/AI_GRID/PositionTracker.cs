@@ -8,8 +8,10 @@ public class PositionTracker : MonoBehaviour
     public TwentySixDirectionsScriptableObject _directionRef;
     public WalksOn walksOn;
     public Vector3 currentGridCoords;
+    public int currentGridIndex {get{return _grid.FlattenedIndex(currentGridCoords);}}
     public bool[] moveableDirections;
     public bool drawGizmo;
+    public Vector3 upVector;
 
     private void OnEnable()
     {
@@ -21,26 +23,23 @@ public class PositionTracker : MonoBehaviour
     private void Update()
     {
         var pos = transform.position;
-        currentGridCoords = new Vector3(
-            Mathf.FloorToInt(pos.x), 
-            Mathf.FloorToInt(pos.y), 
-            Mathf.FloorToInt(pos.z));
+        currentGridCoords = new Vector3((int)pos.x, (int)pos.y, (int)pos.z);
 
-        // only check surrounding when grid pos changes
-        // if (currentGridCoords != prevGridCoords)
+        // this activates once when grid position changes
+        if (currentGridCoords != prevGridCoords)
+            upVector = WhatsMyUpVector();
+
         // check every position around current against the status grid
         for (int i = 0; i < _directionRef.all.Length; i++)
         {
             var checkIndex = currentGridCoords + _directionRef.all[i];
+            // dont check outside grid boundaries
             checkIndex = new Vector3(
                 Mathf.Clamp(checkIndex.x, 0, _grid.size.x),
                 Mathf.Clamp(checkIndex.y, 0, _grid.size.y),
                 Mathf.Clamp(checkIndex.z, 0, _grid.size.z));
 
-            var status = 
-                _grid.points[_grid.FlattenedIndex((int)checkIndex.x, (int)checkIndex.y, (int)checkIndex.z)]
-                .status;
-
+            var status = _grid.points[_grid.FlattenedIndex(checkIndex)].status;
             moveableDirections[i] = CheckType(status);
         }
 
@@ -49,19 +48,19 @@ public class PositionTracker : MonoBehaviour
 
     private bool CheckType(int status)
     {
-        if (status == _grid.SOLID)
+        if (status == Status.SOLID)
             return false;
             
         switch (walksOn)
         {
             case WalksOn.all:
-                return status != _grid.SOLID ? true : false;
+                return status != Status.SOLID ? true : false;
             case WalksOn.airOnly:
-                return status == _grid.AIR ? true : false;
+                return status == Status.AIR ? true : false;
             case WalksOn.surfaceOnly:
-                return status == _grid.SURFACE || status == _grid.GROUND ? true : false;
+                return status == Status.SURFACE || status == Status.GROUND ? true : false;
             case WalksOn.groundOnly:
-                return status == _grid.GROUND ? true : false;
+                return status == Status.GROUND ? true : false;
             default:
                 return false;
         }
@@ -79,6 +78,48 @@ public class PositionTracker : MonoBehaviour
                 closestDirection[i] = Mathf.Infinity; // TODO: just use a big number instead?
         }
         return Array.IndexOf(closestDirection, closestDirection.Min());
+    }
+
+    public Vector3 WhatsMyUpVector()
+    {
+        int rand = UnityEngine.Random.Range(0, 2);
+
+        if (rand == 0)
+        {
+            // do up/down + cardinals first
+            for (int i = 0; i < 6; i++)
+            {
+                if (CondensedCast(i))
+                    return -_directionRef.all[i];
+            }
+            // no hits? do the rest
+            for (int i = 6; i < _directionRef.all.Length; i++)
+            {
+                if (CondensedCast(i))
+                    return -_directionRef.all[i];
+            }
+        }
+        else
+        {
+            // same as above but reverse order
+            for (int i = 5; i >= 0; i--)
+            {
+                if (CondensedCast(i))
+                    return -_directionRef.all[i];
+            }
+            for (int i = _directionRef.all.Length - 1; i >= 0; i--)
+            {
+                if (CondensedCast(i))
+                    return -_directionRef.all[i];
+            }
+        }
+        // nothing at all? then up vector is UP
+        return Vector3.up;
+    }
+
+    private bool CondensedCast(int index)
+    {
+        return Physics.Raycast(transform.position, _directionRef.all[index] * 0.7f, _grid.mask);
     }
 
     private void OnDrawGizmos()

@@ -1391,13 +1391,13 @@ MonoBehaviour:
     coords: {x: 3, y: 6, z: 2}
   - status: 2
     coords: {x: 4, y: 6, z: 2}
-  - status: 2
+  - status: 3
     coords: {x: 5, y: 6, z: 2}
-  - status: 2
+  - status: 3
     coords: {x: 6, y: 6, z: 2}
   - status: 2
     coords: {x: 7, y: 6, z: 2}
-  - status: 2
+  - status: 9
     coords: {x: 8, y: 6, z: 2}
   - status: 2
     coords: {x: 9, y: 6, z: 2}
@@ -1427,15 +1427,15 @@ MonoBehaviour:
     coords: {x: 3, y: 7, z: 2}
   - status: 0
     coords: {x: 4, y: 7, z: 2}
-  - status: 0
+  - status: 9
     coords: {x: 5, y: 7, z: 2}
-  - status: 0
+  - status: 3
     coords: {x: 6, y: 7, z: 2}
   - status: 0
     coords: {x: 7, y: 7, z: 2}
-  - status: 0
+  - status: 2
     coords: {x: 8, y: 7, z: 2}
-  - status: 0
+  - status: 2
     coords: {x: 9, y: 7, z: 2}
   - status: 0
     coords: {x: 10, y: 7, z: 2}
@@ -1463,9 +1463,9 @@ MonoBehaviour:
     coords: {x: 3, y: 8, z: 2}
   - status: 0
     coords: {x: 4, y: 8, z: 2}
-  - status: 0
+  - status: 2
     coords: {x: 5, y: 8, z: 2}
-  - status: 0
+  - status: 2
     coords: {x: 6, y: 8, z: 2}
   - status: 0
     coords: {x: 7, y: 8, z: 2}
@@ -1967,15 +1967,15 @@ MonoBehaviour:
     coords: {x: 3, y: 6, z: 3}
   - status: 2
     coords: {x: 4, y: 6, z: 3}
-  - status: 2
+  - status: 3
     coords: {x: 5, y: 6, z: 3}
-  - status: 2
+  - status: 9
     coords: {x: 6, y: 6, z: 3}
-  - status: 2
+  - status: 9
     coords: {x: 7, y: 6, z: 3}
-  - status: 2
+  - status: 9
     coords: {x: 8, y: 6, z: 3}
-  - status: 2
+  - status: 9
     coords: {x: 9, y: 6, z: 3}
   - status: 2
     coords: {x: 10, y: 6, z: 3}
@@ -2001,17 +2001,17 @@ MonoBehaviour:
     coords: {x: 2, y: 7, z: 3}
   - status: 0
     coords: {x: 3, y: 7, z: 3}
-  - status: 0
+  - status: 3
     coords: {x: 4, y: 7, z: 3}
-  - status: 0
+  - status: 9
     coords: {x: 5, y: 7, z: 3}
-  - status: 0
+  - status: 9
     coords: {x: 6, y: 7, z: 3}
-  - status: 0
+  - status: 3
     coords: {x: 7, y: 7, z: 3}
-  - status: 0
+  - status: 2
     coords: {x: 8, y: 7, z: 3}
-  - status: 0
+  - status: 2
     coords: {x: 9, y: 7, z: 3}
   - status: 0
     coords: {x: 10, y: 7, z: 3}
@@ -2039,11 +2039,11 @@ MonoBehaviour:
     coords: {x: 3, y: 8, z: 3}
   - status: 0
     coords: {x: 4, y: 8, z: 3}
-  - status: 0
+  - status: 2
     coords: {x: 5, y: 8, z: 3}
-  - status: 0
+  - status: 2
     coords: {x: 6, y: 8, z: 3}
-  - status: 0
+  - status: 2
     coords: {x: 7, y: 8, z: 3}
   - status: 0
     coords: {x: 8, y: 8, z: 3}
@@ -2545,11 +2545,11 @@ MonoBehaviour:
     coords: {x: 4, y: 6, z: 4}
   - status: 2
     coords: {x: 5, y: 6, z: 4}
-  - status: 2
+  - status: 9
     coords: {x: 6, y: 6, z: 4}
-  - status: 2
+  - status: 9
     coords: {x: 7, y: 6, z: 4}
-  - status: 2
+  - status: 9
     coords: {x: 8, y: 6, z: 4}
   - status: 2
     coords: {x: 9, y: 6, z: 4}
@@ -2579,13 +2579,13 @@ MonoBehaviour:
     coords: {x: 3, y: 7, z: 4}
   - status: 0
     coords: {x: 4, y: 7, z: 4}
-  - status: 0
+  - status: 3
     coords: {x: 5, y: 7, z: 4}
-  - status: 0
+  - status: 9
     coords: {x: 6, y: 7, z: 4}
-  - status: 0
+  - status: 2
     coords: {x: 7, y: 7, z: 4}
-  - status: 0
+  - status: 2
     coords: {x: 8, y: 7, z: 4}
   - status: 0
     coords: {x: 9, y: 7, z: 4}
@@ -2615,11 +2615,11 @@ MonoBehaviour:
     coords: {x: 3, y: 8, z: 4}
   - status: 0
     coords: {x: 4, y: 8, z: 4}
-  - status: 0
+  - status: 2
     coords: {x: 5, y: 8, z: 4}
-  - status: 0
+  - status: 2
     coords: {x: 6, y: 8, z: 4}
-  - status: 0
+  - status: 2
     coords: {x: 7, y: 8, z: 4}
   - status: 0
     coords: {x: 8, y: 8, z: 4}
@@ -3119,11 +3119,11 @@ MonoBehaviour:
     coords: {x: 3, y: 6, z: 5}
   - status: 2
     coords: {x: 4, y: 6, z: 5}
-  - status: 2
+  - status: 9
     coords: {x: 5, y: 6, z: 5}
-  - status: 2
+  - status: 9
     coords: {x: 6, y: 6, z: 5}
-  - status: 2
+  - status: 9
     coords: {x: 7, y: 6, z: 5}
   - status: 2
     coords: {x: 8, y: 6, z: 5}
@@ -3155,11 +3155,11 @@ MonoBehaviour:
     coords: {x: 3, y: 7, z: 5}
   - status: 0
     coords: {x: 4, y: 7, z: 5}
-  - status: 0
+  - status: 3
     coords: {x: 5, y: 7, z: 5}
-  - status: 0
+  - status: 2
     coords: {x: 6, y: 7, z: 5}
-  - status: 0
+  - status: 2
     coords: {x: 7, y: 7, z: 5}
   - status: 0
     coords: {x: 8, y: 7, z: 5}
@@ -3697,7 +3697,7 @@ MonoBehaviour:
     coords: {x: 4, y: 6, z: 6}
   - status: 2
     coords: {x: 5, y: 6, z: 6}
-  - status: 2
+  - status: 9
     coords: {x: 6, y: 6, z: 6}
   - status: 2
     coords: {x: 7, y: 6, z: 6}
@@ -3733,7 +3733,7 @@ MonoBehaviour:
     coords: {x: 4, y: 7, z: 6}
   - status: 0
     coords: {x: 5, y: 7, z: 6}
-  - status: 0
+  - status: 2
     coords: {x: 6, y: 7, z: 6}
   - status: 0
     coords: {x: 7, y: 7, z: 6}
@@ -8654,4 +8654,3 @@ MonoBehaviour:
   - status: 8
     coords: {x: 17, y: 15, z: 14}
   size: {x: 18, y: 16, z: 15}
-  scale: 1
