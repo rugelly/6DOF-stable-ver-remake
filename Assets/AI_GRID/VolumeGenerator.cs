@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 [ExecuteInEditMode]
 public class VolumeGenerator : MonoBehaviour
@@ -6,7 +7,7 @@ public class VolumeGenerator : MonoBehaviour
     public TwentySixDirectionsScriptableObject _dir;
     public GridStorageSO _grid;
 
-    public bool generate;
+    public bool generateField, generateNodes, clearNodes;
 
     public Transform groundNodesParent;
     public Transform surfaceNodesParent;
@@ -14,11 +15,25 @@ public class VolumeGenerator : MonoBehaviour
     private void OnGUI()
     {
         if (Application.isEditor)
-            if (generate)
+        {
+            if (generateField)
             {
-                generate = false;
+                generateField = false;
                 Generate();
             }
+
+            if (generateNodes)
+            {
+                generateNodes = false;
+                GenerateNodes();
+            }
+
+            if (clearNodes)
+            {
+                clearNodes = false;
+                ClearNodes();
+            }
+        }
     }
 
     private void Generate()
@@ -38,48 +53,57 @@ public class VolumeGenerator : MonoBehaviour
             }
         }
 
-        _grid.ground.Clear();
-        _grid.surface.Clear();
+        
+    }
 
+    private void GenerateNodes()
+    {
         foreach (var point in _grid.points)
         {
             if (point.status == Status.GROUND)
             {
+                // var tmp = new Point(point.status, point.coords);
                 _grid.ground.Add(point);
                 _grid.surface.Add(point);
             }
 
             if (point.status == Status.SURFACE)
+            {
+                // var tmp = new Point(point.status, point.coords);
                 _grid.surface.Add(point);
-        }
-
-        while (groundNodesParent.childCount > 0)
-        {
-            foreach (Transform child in groundNodesParent)
-            {
-                DestroyImmediate(child);
-            }
-        }
-        while (surfaceNodesParent.childCount > 0)
-        {
-            foreach (Transform child in surfaceNodesParent)
-            {
-                DestroyImmediate(child);
             }
         }
 
         foreach (var point in _grid.ground)
         {
-            var go = new GameObject();
-            Instantiate(go, point.coords, Quaternion.identity);
-            go.transform.parent = groundNodesParent;
+            StartCoroutine(InstantiateRoutine(point, groundNodesParent));
         }
         foreach (var point in _grid.surface)
         {
-            var go = new GameObject();
-            Instantiate(go, point.coords, Quaternion.identity);
-            go.transform.parent = surfaceNodesParent;
+            StartCoroutine(InstantiateRoutine(point, surfaceNodesParent));
         }
+    }
+
+    private void ClearNodes()
+    {
+        _grid.ground.Clear();
+        _grid.surface.Clear();
+
+        foreach (Transform child in groundNodesParent)
+        { DestroyImmediate(child.gameObject); DestroyRoutine(groundNodesParent); }
+
+        foreach (Transform child in surfaceNodesParent)
+        { DestroyImmediate(child.gameObject); DestroyRoutine(surfaceNodesParent); }
+    }
+    private void DestroyRoutine(Transform parent)
+    {foreach (Transform child in parent) { DestroyImmediate(child.gameObject);}}
+
+    IEnumerator InstantiateRoutine(Point point, Transform parent)
+    {
+        var go = new GameObject();
+        go.transform.parent = parent;
+        go.transform.position = point.coords;
+        yield return null;
     }
 
     private int CheckSpot(float x, float y, float z)
