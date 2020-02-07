@@ -7679,7 +7679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _grid: {fileID: 11400000, guid: 91584f26358ae2e498623f174c013381, type: 2}
-  drawGrid: 0
+  drawGrid: 1
   drawBorder: 0
   size: 0.152
 --- !u!1 &382892953
@@ -37552,7 +37552,7 @@ MonoBehaviour:
     file_cachedStartup: {fileID: 0}
     data_cachedStartup: 
     cacheStartup: 0
-  showNavGraphs: 1
+  showNavGraphs: 0
   showUnwalkableNodes: 1
   debugMode: 0
   debugFloor: 0
