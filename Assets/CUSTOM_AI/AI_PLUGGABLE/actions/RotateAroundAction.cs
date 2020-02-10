@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "pluggableAI/actions/rotate around point")]
 public class RotateAroundAction : Action
 {
     public override void Act(StateController controller)
