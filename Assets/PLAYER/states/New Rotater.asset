@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c3bddda195de74d8c1269794b1aed0, type: 3}
   m_Name: New Rotater
   m_EditorClassIdentifier: 
-  sens: {x: -0.001, y: -0.001}
-  clamp: {x: -0.001, y: -0.001}
+  MovementIndex: 0
+  sens:
+    value: {x: 0, y: 0}
+    overriding: 0
+  clamp:
+    value: {x: 0, y: 0}
+    overriding: 0

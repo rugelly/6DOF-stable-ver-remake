@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ba2d9ac9471b744baca943d3cf3e27, type: 3}
   m_Name: New Player Stats
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  accelTime: 1
+  moveSpeed: 5
+  accelTime: 5
   lookSensitivity: {x: 1, y: 1}
   lookClamp: {x: -45, y: 75}
-  jumpStrength: {x: 0, y: 1, z: 0}
+  jumpStrength: {x: 0, y: 5, z: 0}
+  jumpDecel: 5
   gravity: {x: 0, y: -5, z: 0}

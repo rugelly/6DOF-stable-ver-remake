@@ -12,5 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49c9e90f78df954d8962daeafd95cc4, type: 3}
   m_Name: New Jump
   m_EditorClassIdentifier: 
-  strength: {x: 0, y: 1, z: 0}
-  movementIndex: 2
+  MovementIndex: 3
+  jumpStrength:
+    value: {x: 0, y: 0, z: 0}
+    overriding: 0
+  jumpDeceleration:
+    value: 0
+    overriding: 0
+  timer: 0
+  mult: 0
+  final: {x: 0, y: 10, z: 0}

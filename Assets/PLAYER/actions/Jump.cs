@@ -3,31 +3,47 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "pluggablePLAYER/actions/jump")]
 public class Jump : PlayerAction
 {
-    public Vector3 strength = new Vector3(StatUtil.FLOAT, StatUtil.FLOAT, StatUtil.FLOAT);
+    public StatVector3 jumpStrength; private Vector3 actualJumpStrength;
+    public StatFloat jumpDeceleration; private float actualJumpDeceleration;
 
-    [SerializeField]
-    private int movementIndex;
+    public float timer;
+    private float timerMax;
+    public float mult;
+
+    public Vector3 final;
 
     public override void OnEnter(PlayerStateController sc)
     {
         Debug.Log(this.GetType().ToString() + " : on enter called");
 
-        StatUtil.CheckAndSet(sc, ref strength, new Vector3(StatUtil.FLOAT, StatUtil.FLOAT, StatUtil.FLOAT), sc.stats.jumpStrength, strength);
+        actualJumpStrength = jumpStrength.overriding ? jumpStrength.value : sc.stats.jumpStrength;
+        actualJumpStrength -= sc.stats.gravity;
+        actualJumpDeceleration = jumpDeceleration.overriding ? jumpDeceleration.value : sc.stats.jumpDecel;
 
-        movementIndex = MovementVector.ClaimIndex();
+        timerMax = actualJumpStrength.magnitude;
+
+        SetIndex(MovementVector.ClaimIndex());
     }
 
     public override void Act(PlayerStateController sc)
     {
-        var actual = sc.transform.TransformDirection(strength);
-        MovementVector.array[movementIndex] = sc._input.jump ? actual : Vector3.zero;
-    }
+        if (sc._input.jump)
+        {
+            final = sc.transform.TransformDirection(actualJumpStrength);
+            timer = timerMax;
+        }
 
-    
+        timer -= (actualJumpDeceleration * Time.deltaTime) * actualJumpDeceleration;
+        timer = Mathf.Clamp(timer, 0, timerMax);
+        mult = timer / timerMax;
+
+        MovementVector.array[GetIndex()] = final * mult;
+    }
 
     public override void OnExit()
     {
         MovementVector.CedeIndex();
+
         Debug.Log(this.GetType().ToString() + " : on exit called");
     }
 }

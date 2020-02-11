@@ -5,7 +5,6 @@ public class PlayerState : ScriptableObject
 {
     public PlayerAction[] actions;
     public PlayerTransition[] transitions;
-    public Color sceneGizmoColour = Color.grey;
 
     public void UpdateState(PlayerStateController controller)
     {

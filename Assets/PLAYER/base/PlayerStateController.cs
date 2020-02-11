@@ -9,10 +9,9 @@ public class PlayerStateController : MonoBehaviour
 
     public PlayerStats stats;
     public Transform cam;
+    public Transform grappleShootPoint;
     [HideInInspector] public PlayerInput _input;
     [HideInInspector] public CharacterController _charCont;
-
-    [HideInInspector] public float stateTimeElapsed;
 
     private void Awake()
     {
@@ -40,12 +39,6 @@ public class PlayerStateController : MonoBehaviour
         }
     }
 
-    public bool CheckIfCountdownElapsed(float duration)
-    {
-        stateTimeElapsed += Time.deltaTime;
-        return (stateTimeElapsed >= duration);
-    }
-
     private void OnEnterState(PlayerStateController sc)
     {
         foreach (var action in currentState.actions)
@@ -56,7 +49,6 @@ public class PlayerStateController : MonoBehaviour
 
     private void OnExitState()
     {
-        stateTimeElapsed = 0;
         StartCoroutine(ExitActionRoutine());
     }
 

@@ -3,40 +3,45 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "pluggablePLAYER/actions/gravity")]
 public class Gravity : PlayerAction
 {
-    public Vector3 field = new Vector3(StatUtil.FLOAT, StatUtil.FLOAT, StatUtil.FLOAT);
+    public StatVector3 gravity; private Vector3 actualGravity;
     public float timeToEvalCurve = 0;
-    public AnimationCurve curve;
+    public AnimationCurve curve = AnimationCurve.Constant(0, 1, 1);
 
-    [SerializeField]
-    private int movementIndex;
     private float timer = 0;
+    private float curvePosition, eval;
 
     public override void OnEnter(PlayerStateController sc)
     {
         Debug.Log(this.GetType().ToString() + " : on enter called");
 
-        StatUtil.CheckAndSet(sc,
-                             ref field,
-                             new Vector3(StatUtil.FLOAT, StatUtil.FLOAT, StatUtil.FLOAT),
-                             sc.stats.gravity,
-                             field);
+        actualGravity = gravity.overriding ? gravity.value : sc.stats.gravity;
 
-        movementIndex = MovementVector.ClaimIndex();
+        SetIndex(MovementVector.ClaimIndex());
     }
 
     public override void Act(PlayerStateController sc)
     {
-        timer += timeToEvalCurve * Time.deltaTime;
-        timer = Mathf.Clamp(timer, 0, timeToEvalCurve);
-        var curvePosition = timer / timeToEvalCurve;
-        var eval = curve.Evaluate(curvePosition);
-        MovementVector.array[movementIndex] = field * eval * Time.deltaTime;
+        if (timeToEvalCurve != 0)
+        {
+            timer += timeToEvalCurve * Time.deltaTime;
+            timer = Mathf.Clamp(timer, 0, timeToEvalCurve);
+            curvePosition = timer / timeToEvalCurve;
+            eval = curve.Evaluate(curvePosition);
+        }
+        else
+        {
+            eval = 1;
+        }
+        actualGravity += actualGravity * Time.deltaTime;
+        MovementVector.array[GetIndex()] = actualGravity * eval;
     }
 
     public override void OnExit()
     {
         timer = 0;
+
         MovementVector.CedeIndex();
+
         Debug.Log(this.GetType().ToString() + " : on exit called");
     }
 }

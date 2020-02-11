@@ -12,7 +12,7 @@ public class Mover : PlayerAction
         {
             sum += vector;
         }
-        sc._charCont.Move(sum);
+        sc._charCont.Move(sum * Time.deltaTime);
         functionalTotal = sum;
         sum = Vector3.zero;
     }

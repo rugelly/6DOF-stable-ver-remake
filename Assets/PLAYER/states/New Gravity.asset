@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f54649f57846df47a44530a142c496c, type: 3}
   m_Name: New Gravity
   m_EditorClassIdentifier: 
-  field: {x: 0, y: -5, z: 0}
-  timeToEvalCurve: 5
+  MovementIndex: 5
+  gravity:
+    value: {x: 0, y: 0, z: 0}
+    overriding: 0
+  timeToEvalCurve: 0
   curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -29,8 +32,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
@@ -38,4 +41,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementIndex: 3
