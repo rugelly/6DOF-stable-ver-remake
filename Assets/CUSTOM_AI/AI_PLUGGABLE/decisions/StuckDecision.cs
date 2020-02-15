@@ -2,14 +2,14 @@ using UnityEngine;
 using System.Collections;
 
 [CreateAssetMenu(menuName = "pluggableAI/decisions/stuck")]
-public class StuckDecision : Decision
+public class StuckDecision : AIDecision
 {
     public float stuckMinDistance = 0.1f;
     public float maxTime = 0.5f;
 
     float timer;
     bool running;
-    public override bool Decide(StateController controller)
+    public override bool Decide(AIStateController controller)
     {
         if (!running)
             controller.StartCoroutine(SavePosition(controller));
@@ -17,7 +17,7 @@ public class StuckDecision : Decision
         return timer == maxTime ? true : false;
     }
 
-    IEnumerator SavePosition(StateController controller)
+    IEnumerator SavePosition(AIStateController controller)
     {
         Debug.Log("stuck check coroutine start... waiting for 0.2secs to compare position...");
         running = false;

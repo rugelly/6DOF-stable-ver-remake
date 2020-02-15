@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class StateController : MonoBehaviour
+public class AIStateController : MonoBehaviour
 {
-    public State currentState;
+    public AIState currentState;
     public EnemyStats stats;
     public Target target;
     public Vector3 eye;
-    public State remainState;
+    public AIState remainState;
 
     [HideInInspector] public float stateTimeElapsed;
     [HideInInspector] public Motor _motor;
@@ -21,7 +21,7 @@ public class StateController : MonoBehaviour
         currentState.UpdateState(this);
     }
 
-    public void TransitionToState(State nextState)
+    public void TransitionToState(AIState nextState)
     {
         if (nextState != remainState)
         {

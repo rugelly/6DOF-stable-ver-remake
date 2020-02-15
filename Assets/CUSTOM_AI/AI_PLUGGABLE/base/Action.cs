@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public abstract class Action : ScriptableObject
+public abstract class AIAction : ScriptableObject
 {
-    public abstract void Act(StateController controller);
+    public abstract void Act(AIStateController controller);
 
     public abstract void OnExit();
 }

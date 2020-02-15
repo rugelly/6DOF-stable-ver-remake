@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Decision : ScriptableObject
+public abstract class AIDecision : ScriptableObject
 {
-    public abstract bool Decide(StateController controller);
+    public abstract bool Decide(AIStateController controller);
 }

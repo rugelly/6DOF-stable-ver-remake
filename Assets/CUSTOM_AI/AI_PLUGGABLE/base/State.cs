@@ -1,19 +1,19 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName="pluggableAI/state")]
-public class State : ScriptableObject
+public class AIState : ScriptableObject
 {
-    public Action[] actions;
-    public Transition[] transitions;
+    public AIAction[] actions;
+    public AITransition[] transitions;
     public Color sceneGizmoColour = Color.grey;
 
-    public void UpdateState(StateController controller)
+    public void UpdateState(AIStateController controller)
     {
         CheckTransitions(controller);
         DoActions(controller);
     }
 
-    private void DoActions(StateController controller)
+    private void DoActions(AIStateController controller)
     {
         for (int i = 0; i < actions.Length; i++)
         {
@@ -21,7 +21,7 @@ public class State : ScriptableObject
         }
     }
 
-    private void CheckTransitions(StateController controller)
+    private void CheckTransitions(AIStateController controller)
     {
         for (int i = 0; i < transitions.Length; i++)
         {

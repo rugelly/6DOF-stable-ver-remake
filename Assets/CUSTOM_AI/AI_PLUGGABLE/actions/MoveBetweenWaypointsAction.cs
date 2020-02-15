@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "pluggableAI/actions/waypoint move between")]
-public class MoveBetweenWaypointsAction : Action
+public class MoveBetweenWaypointsAction : AIAction
 {
     public Waypoint[] waypoints;
     public bool reverseDirection;
@@ -9,7 +9,7 @@ public class MoveBetweenWaypointsAction : Action
     private bool trigger = false;
     private int currentIndex;
 
-    public override void Act(StateController controller)
+    public override void Act(AIStateController controller)
     {
         if (!trigger)
         {

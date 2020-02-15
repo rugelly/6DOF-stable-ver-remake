@@ -2,11 +2,11 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "pluggableAI/decisions/target in LOS")]
-public class TargetInLOSDecision : Decision
+public class TargetInLOSDecision : AIDecision
 {
     float timer;
 
-    public override bool Decide(StateController controller)
+    public override bool Decide(AIStateController controller)
     {
         if (InFOV(
                 controller.target,

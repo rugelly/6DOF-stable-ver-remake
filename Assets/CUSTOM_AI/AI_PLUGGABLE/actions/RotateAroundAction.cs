@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "pluggableAI/actions/rotate around point")]
-public class RotateAroundAction : Action
+public class RotateAroundAction : AIAction
 {
-    public override void Act(StateController controller)
+    public override void Act(AIStateController controller)
     {
         controller._motor.Move(
             FollowRotatingPoint(

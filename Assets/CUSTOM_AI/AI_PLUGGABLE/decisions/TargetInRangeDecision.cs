@@ -1,13 +1,13 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "pluggableAI/decisions/target in range")]
-public class TargetInRangeDecision : Decision
+public class TargetInRangeDecision : AIDecision
 {
     public RangeType rangeType;
     public float customRange;
     private float range;
 
-    public override bool Decide(StateController controller)
+    public override bool Decide(AIStateController controller)
     {
         switch (rangeType)
         {
@@ -24,7 +24,7 @@ public class TargetInRangeDecision : Decision
         return DistanceCheck(controller, range);
     }
 
-    private bool DistanceCheck(StateController controller, float r)
+    private bool DistanceCheck(AIStateController controller, float r)
     {
         var distance = Vector3.Distance(controller.target.obj.transform.position, controller.transform.position);
         return distance <= r * r;

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName="pluggableAI/actions/maintain distance")]
-public class MaintainDistanceAction : Action
+public class MaintainDistanceAction : AIAction
 {
     public float overrideDistanceToKeep;
 
-    public override void Act(StateController controller)
+    public override void Act(AIStateController controller)
     {
         var distance = Vector3.Distance(controller.target.obj.transform.position, controller.transform.position);
         var target = controller.target.obj.transform.position;
